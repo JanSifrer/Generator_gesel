@@ -1,22 +1,51 @@
 from tkinter import *
-import secrets
 from tkinter import messagebox
+from tkinter import filedialog
+from tkinter import simpledialog
+
+
+import secrets
+
+
+def test():
+    print("test")
+
 class Generiraj:
     def __init__(self, okno):
-        okno.title('Generator')
+        okno.title("Generator")
         self.okno = okno
         
-        Label(okno, text='Vnesite dolžino gesla').grid(row=0, column=0, sticky=W)
+        menubar = Menu(okno)
+        filemenu = Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Novo", command=self.novo)
+        filemenu.add_separator()
+        filemenu.add_command(label="Izhod", command=okno.destroy)
+        filemenu.add_separator()
+        menubar.add_cascade(label="Datoteka", menu=filemenu)
 
-        Label(okno, text='Izberite katere simbole\nnaj vsebuje geslo.').grid(row=0, column=1)
+        savemenu = Menu(menubar, tearoff=0)
+        savemenu.add_command(label="Shrani", command=self.shrani)
+        savemenu.add_command(label="Shrani določeno št.", command=self.shrani)
+        menubar.add_cascade(label="Shrani", menu=savemenu)
 
-        self.vnos = Entry(okno, text='0', font = '1', width=25)
+
+        menubar.add_command(label="Navodila", command=self.navodila)
+
+        menubar.add_command(label="Pomoč", command=self.pomoc)
+        okno.config(menu=menubar)
+
+        
+        Label(okno, text="Vnesite dolžino gesla").grid(row=0, column=0, sticky=W)
+
+        Label(okno, text="Izberite katere simbole\nnaj vsebuje geslo.").grid(row=0, column=1)
+
+        self.vnos = Entry(okno, text="0", font = "1", width=25)
         self.vnos.grid(row=1, column=0)
         
         self.izpis1 = DoubleVar(okno)
-        izpis = Entry(okno, textvariable=self.izpis1, font = '2', width=25).grid(row=5, column=0, sticky=W)
+        izpis = Entry(okno, textvariable=self.izpis1, font = "2", width=25).grid(row=5, column=0, sticky=W)
 
-        Button(okno, text='Generiraj', command=self.generiraj, height=5, width=10).grid(row=5, column=1, sticky=W)
+        Button(okno, text="Generiraj", command=self.generiraj, height=5, width=10).grid(row=5, column=1, sticky=W)
         
         self.var1 = IntVar()
         Checkbutton(okno, text="velike črke", variable=self.var1).grid(row=1, column=1, sticky=W)
@@ -28,19 +57,17 @@ class Generiraj:
         Checkbutton(okno, text="znaki", variable=self.var4).grid(row=4, column=1, sticky=W)
 
 
-    def hello(event):
-            print("Single Click, Button-l")       
     def generiraj(self):
         a = int(self.var1.get())
         b = int(self.var2.get())
         c = int(self.var3.get())
         d = int(self.var4.get())
-        with open('sestavni_deli_gesla.txt', 'r') as dat:
+        with open("sestavni_deli_gesla.txt", "r") as dat:
             x = (self.vnos.get())
             try:
                 x = int(x)
             except ValueError:
-                return messagebox.showerror('NAPAKA', 'Vnesite veljavno dolžino!')
+                return messagebox.showerror("NAPAKA", "Vnesite veljavno dolžino!")
             geslo = []
             sez = []
             sez_gesla = []
@@ -61,7 +88,22 @@ class Generiraj:
                 x -= 1
                 znak = secrets.randbelow(len(sez_gesla)-1)
                 geslo += sez_gesla[znak]
-            self.izpis1.set(''.join(geslo))
+            self.geslo = ''.join(geslo)
+            self.izpis1.set(self.geslo)
+
+    def novo(self):
+        self.izpis1.set(0.0)
+
+    def shrani(self):
+        with open("gesla.txt", "w") as gesla:
+            gesla.write(self.geslo)
+
+    def navodila(self):
+        messagebox.showinfo("Navodila", """V prvo vrstico vnesite dolžino željenega gesla.
+Nato na desni strani izberite iz katerih znakov naj bo sestavljeno geslo. V nasprotnem primeru, bo geslo vsebovalo vse simbole. """)
+
+    def pomoc(self):
+        messagebox.showinfo("Pomoč", "Za  dodatna pojasnila nas kontaktirajte na: jan.sifrer@student.fmf.uni-lj.si")
 
 
 okno = Tk()
