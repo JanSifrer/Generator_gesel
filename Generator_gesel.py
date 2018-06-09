@@ -1,14 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-from tkinter import filedialog
-from tkinter import simpledialog
-
-
 import secrets
 
-
-def test():
-    print("test")
 
 class Generiraj:
     def __init__(self, okno):
@@ -23,10 +16,7 @@ class Generiraj:
         filemenu.add_separator()
         menubar.add_cascade(label="Datoteka", menu=filemenu)
 
-        savemenu = Menu(menubar, tearoff=0)
-        savemenu.add_command(label="Shrani", command=self.shrani)
-        savemenu.add_command(label="Shrani določeno št.", command=self.shrani)
-        menubar.add_cascade(label="Shrani", menu=savemenu)
+        menubar.add_command(label="Shrani", command=self.shrani)
 
 
         menubar.add_command(label="Navodila", command=self.navodila)
@@ -39,13 +29,15 @@ class Generiraj:
 
         Label(okno, text="Izberite katere simbole\nnaj vsebuje geslo.").grid(row=0, column=1)
 
-        self.vnos = Entry(okno, text="0", font = "1", width=25)
+        self.vnos = Entry(okno, font = "1", width="25")
         self.vnos.grid(row=1, column=0)
         
         self.izpis1 = DoubleVar(okno)
-        izpis = Entry(okno, textvariable=self.izpis1, font = "2", width=25).grid(row=5, column=0, sticky=W)
+        izpis = Entry(okno, textvariable=self.izpis1, font = "2", width="25").grid(row=5, column=0, sticky=W)
 
-        Button(okno, text="Generiraj", command=self.generiraj, height=5, width=10).grid(row=5, column=1, sticky=W)
+        Button(okno, text="Generiraj", command=self.generiraj, height=3, width=8).grid(row=5, column=1, sticky=W)
+
+        Button(okno, text="Kopiraj", command=self.kopiraj).grid(row=6, column=0, sticky=W)
         
         self.var1 = IntVar()
         Checkbutton(okno, text="velike črke", variable=self.var1).grid(row=1, column=1, sticky=W)
@@ -97,14 +89,20 @@ class Generiraj:
     def shrani(self):
         with open("gesla.txt", "w") as gesla:
             gesla.write(self.geslo)
+            print("Vaša datoteka je shranjena v isti mapi kot program.")
+            
 
     def navodila(self):
-        messagebox.showinfo("Navodila", """V prvo vrstico vnesite dolžino željenega gesla.
-Nato na desni strani izberite iz katerih znakov naj bo sestavljeno geslo. V nasprotnem primeru, bo geslo vsebovalo vse simbole. """)
+        messagebox.showinfo("Navodila", """V prvo vrstico vnesite dolžino željenega gesla. Nato na desni strani izberite iz katerih znakov naj bo sestavljeno geslo. V nasprotnem primeru, bo geslo vsebovalo vse simbole. """)
 
     def pomoc(self):
         messagebox.showinfo("Pomoč", "Za  dodatna pojasnila nas kontaktirajte na: jan.sifrer@student.fmf.uni-lj.si")
 
+    def kopiraj(self):
+        okno.clipboard_clear()
+        okno.clipboard_append(self.geslo)
+        print('Geslo je skopirano!')
+        
 
 okno = Tk()
 app = Generiraj(okno)
