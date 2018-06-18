@@ -7,7 +7,7 @@ class Generiraj:
     def __init__(self, okno):
         okno.title("Generator")
         self.okno = okno
-        
+
         menubar = Menu(okno)
         filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="Novo", command=self.novo)
@@ -24,36 +24,36 @@ class Generiraj:
         menubar.add_command(label="Pomoč", command=self.pomoc)
         okno.config(menu=menubar)
 
-        
+
         Label(okno, text="Vnesite dolžino gesla").grid(row=0, column=0, sticky=W)
 
         Label(okno, text="Izberite katere simbole\nnaj vsebuje geslo.").grid(row=0, column=1)
 
         self.vnos = Entry(okno, font = "1", width="25")
         self.vnos.grid(row=1, column=0)
-        
+
         self.izpis1 = DoubleVar(okno)
         izpis = Entry(okno, textvariable=self.izpis1, font = "2", width="25").grid(row=5, column=0, sticky=W)
 
         Button(okno, text="Generiraj", command=self.generiraj, height=3, width=8).grid(row=5, column=1, sticky=W)
 
         Button(okno, text="Kopiraj", command=self.kopiraj).grid(row=6, column=0, sticky=W)
-        
-        self.var1 = IntVar()
-        Checkbutton(okno, text="velike črke", variable=self.var1).grid(row=1, column=1, sticky=W)
-        self.var2 = IntVar()
-        Checkbutton(okno, text="male črke", variable=self.var2).grid(row=2, column=1, sticky=W)
-        self.var3 = IntVar()
-        Checkbutton(okno, text="številke", variable=self.var3).grid(row=3, column=1, sticky=W)
-        self.var4 = IntVar()
-        Checkbutton(okno, text="znaki", variable=self.var4).grid(row=4, column=1, sticky=W)
+
+        self.velike_crke= DoubleVar()
+        Checkbutton(okno, text="velike črke", variable=self.velike_crke).grid(row=1, column=1, sticky=W)
+        self.male_crke = DoubleVar()
+        Checkbutton(okno, text="male črke", variable=self.male_crke).grid(row=2, column=1, sticky=W)
+        self.stevilke = DoubleVar()
+        Checkbutton(okno, text="številke", variable=self.stevilke).grid(row=3, column=1, sticky=W)
+        self.znaki = DoubleVar()
+        Checkbutton(okno, text="znaki", variable=self.znaki).grid(row=4, column=1, sticky=W)
 
 
     def generiraj(self):
-        a = int(self.var1.get())
-        b = int(self.var2.get())
-        c = int(self.var3.get())
-        d = int(self.var4.get())
+        a = int(self.velike_crke.get())
+        b = int(self.male_crke.get())
+        c = int(self.stevilke.get())
+        d = int(self.znaki.get())
         with open("sestavni_deli_gesla.txt", "r") as dat:
             x = (self.vnos.get())
             try:
@@ -75,7 +75,7 @@ class Generiraj:
                 sez_gesla += sez[3]
             if a == b == c == d == 0:
                 sez_gesla = ''.join(sez)
-                    
+
             while x:
                 x -= 1
                 znak = secrets.randbelow(len(sez_gesla)-1)
@@ -89,8 +89,8 @@ class Generiraj:
     def shrani(self):
         with open("gesla.txt", "w") as gesla:
             gesla.write(self.geslo)
-            print("Vaša datoteka je shranjena v isti mapi kot program.")
-            
+            messagebox.showinfo("Shranjeno", "Vaša datoteka je shranjena v isti mapi kot program.")
+
 
     def navodila(self):
         messagebox.showinfo("Navodila", """V prvo vrstico vnesite dolžino željenega gesla. Nato na desni strani izberite iz katerih znakov naj bo sestavljeno geslo. V nasprotnem primeru, bo geslo vsebovalo vse simbole. """)
@@ -101,8 +101,8 @@ class Generiraj:
     def kopiraj(self):
         okno.clipboard_clear()
         okno.clipboard_append(self.geslo)
-        print('Geslo je skopirano!')
-        
+        messagebox.showinfo("Kopirano", 'Geslo je skopirano!')
+
 
 okno = Tk()
 app = Generiraj(okno)
