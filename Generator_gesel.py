@@ -21,7 +21,6 @@ class Geslo:
         messagebox.showinfo("Shranjeno", "Vaše geslo je shranjeno v datoteko, ki se nahaja v isti mapi kot program.")
 
 
-
     def generiraj(self):
         a = int(velike_crke.get())
         b = int(male_crke.get())
@@ -56,8 +55,6 @@ class Geslo:
             self.geslo = ''.join(self.geslo)
             izpis1.set(self.geslo)
           
-
-    
 
 okno = Tk()
 okno.title("Generator")
